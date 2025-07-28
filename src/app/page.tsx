@@ -4,7 +4,7 @@ import { supabaseServer } from '@/lib/supabase-server'
 
 export default async function DashboardPage() {
   // 1. Check session on the server
-  const supabase = await supabaseServer()
+  const supabase = supabaseServer()
   const {
     data: { session },
   } = await supabase.auth.getSession()

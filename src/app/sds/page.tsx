@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { supabaseServer } from '@/lib/supabase-server'
 
 export default async function SdsPage() {
-  const supabase = await supabaseServer()
+  const supabase = supabaseServer()
   const {
     data: { session },
   } = await supabase.auth.getSession()
