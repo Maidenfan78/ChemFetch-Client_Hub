@@ -47,9 +47,6 @@ lib/ # Supabase client and utilities
 types/ # Shared types (e.g. Supabase schema)
 styles/ # Tailwind + global styles
 
-yaml
-Copy
-Edit
 
 ---
 
@@ -61,26 +58,28 @@ Edit
 git clone https://github.com/YOUR_ORG/chemfetch-client-hub.git
 cd chemfetch-client-hub
 npm install
-Create .env.local with your Supabase details:
+```
 
-env
-Copy
-Edit
+Create a `.env.local` file with your Supabase details:
+
+```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
 Run the dev server:
 
-bash
-Copy
-Edit
+```bash
 npm run dev
+```
+
 🧪 Dev Tips
 Run type checks:
 
-bash
-Copy
-Edit
+```bash
 npx tsc --noEmit
+```
+
 Deploy via Vercel for instant frontend hosting
 
 Supabase schema is managed in the chemfetch-supabase repo
@@ -91,9 +90,6 @@ MIT (or custom license if commercial)
 🙋 Support
 This is part of a private platform. For access, onboarding, or bug reports, please contact the project maintainer.
 
-yaml
-Copy
-Edit
 
 ---
 
