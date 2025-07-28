@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ChemFetch Client Hub
 
-## Getting Started
+**Client-facing dashboard** for businesses to manage their chemical registers, Safety Data Sheets (SDS), and compliance records.
 
-First, run the development server:
+This repo is part of the larger **ChemFetch** platform.
+
+---
+
+## 🔗 Related Repositories
+
+| Repo                     | Purpose                                                   |
+|--------------------------|-----------------------------------------------------------|
+| [`chemfetch-mobile`](https://github.com/YOUR_ORG/chemfetch-mobile)     | Expo app for barcode scanning, OCR, and SDS capture         |
+| [`chemfetch-client-hub`](.)                               | **(This repo)** Web dashboard for chemical register management |
+| [`chemfetch-backend`](https://github.com/YOUR_ORG/chemfetch-backend)   | Node.js API server for OCR, scraping, and logic             |
+| [`chemfetch-supabase`](https://github.com/YOUR_ORG/chemfetch-supabase) | Supabase migrations and schema                             |
+| [`chemfetch-admin-hub`](https://github.com/YOUR_ORG/chemfetch-admin-hub) (optional) | Internal admin tools                                        |
+
+---
+
+## ✨ Features
+
+- 🔐 Supabase Auth login (email/password)
+- 📦 View and manage your company's chemical register
+- 🔗 SDS URL integration with status indicators
+- 📁 CSV export for compliance reporting
+- 📍 Future: multi-location grouping and audit trail
+
+---
+
+## 🛠️ Tech Stack
+
+- [Next.js 14](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Supabase](https://supabase.com/) (Auth + Postgres)
+- TypeScript (App Router)
+
+---
+
+## 🧱 Project Structure
+
+src/
+app/ # Next.js App Router routes
+components/ # Shared UI components
+lib/ # Supabase client and utilities
+types/ # Shared types (e.g. Supabase schema)
+styles/ # Tailwind + global styles
+
+yaml
+Copy
+Edit
+
+---
+
+## ⚙️ Setup Instructions
+
+> Prerequisites: Node.js 18+, npm, Supabase project, Vercel (optional)
 
 ```bash
+git clone https://github.com/YOUR_ORG/chemfetch-client-hub.git
+cd chemfetch-client-hub
+npm install
+Create .env.local with your Supabase details:
+
+env
+Copy
+Edit
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+Run the dev server:
+
+bash
+Copy
+Edit
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🧪 Dev Tips
+Run type checks:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+bash
+Copy
+Edit
+npx tsc --noEmit
+Deploy via Vercel for instant frontend hosting
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Supabase schema is managed in the chemfetch-supabase repo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📜 License
+MIT (or custom license if commercial)
 
-## Learn More
+🙋 Support
+This is part of a private platform. For access, onboarding, or bug reports, please contact the project maintainer.
 
-To learn more about Next.js, take a look at the following resources:
+yaml
+Copy
+Edit
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
