@@ -4,7 +4,7 @@ import { supabaseServer } from '@/lib/supabase-server'
 
 type WatchListItem = {
   id: number
-  products: {
+  product: {
     name: string
     sds_url: string | null
   }
@@ -20,7 +20,7 @@ export default async function SdsPage() {
   // fetch the user’s watch-list
   const { data: watchList } = await supabase
     .from('user_chemical_watch_list')
-    .select('id, products(name, sds_url)')
+    .select('id, product:product_id(name, sds_url)')
     .returns<WatchListItem[]>()
 
   return (
@@ -30,11 +30,11 @@ export default async function SdsPage() {
         {watchList?.map((item) => (
           <li key={item.id}>
             <a
-              href={item.products.sds_url ?? '#'}
+              href={item.product.sds_url ?? '#'}
               target="_blank"
               className="text-blue-600 hover:underline"
             >
-              {item.products.name}
+              {item.product.name}
             </a>
           </li>
         ))}
