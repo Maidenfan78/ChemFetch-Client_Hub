@@ -2,6 +2,14 @@
 import { redirect } from 'next/navigation'
 import { supabaseServer } from '@/lib/supabase-server'
 
+type WatchListItem = {
+  id: number
+  product: {
+    name: string
+    sds_url: string | null
+  }
+}
+
 export default async function SdsPage() {
   const supabase = supabaseServer()
   const {
@@ -13,6 +21,7 @@ export default async function SdsPage() {
   const { data: watchList } = await supabase
     .from('user_chemical_watch_list')
     .select('id, product(name, sds_url)')
+    .returns<WatchListItem[]>()
 
   return (
     <div className="p-4">
@@ -21,7 +30,7 @@ export default async function SdsPage() {
         {watchList?.map((item) => (
           <li key={item.id}>
             <a
-              href={item.product.sds_url}
+              href={item.product.sds_url ?? '#'}
               target="_blank"
               className="text-blue-600 hover:underline"
             >
