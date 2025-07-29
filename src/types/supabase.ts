@@ -19,6 +19,22 @@ export interface Database {
           product_id?: string
         }
       }
+      products: {
+        Row: {
+          id: string
+          name: string
+          sds_url: string | null
+        }
+        Insert: {
+          id: string
+          name: string
+          sds_url?: string | null
+        }
+        Update: {
+          name?: string
+          sds_url?: string | null
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>

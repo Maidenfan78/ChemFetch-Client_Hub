@@ -19,10 +19,20 @@ export default function WatchListPage() {
         <ul className="space-y-2">
           {data.map((entry) => (
             <li key={entry.id} className="border p-4 rounded shadow">
-              <p><strong>Product:</strong> {entry.products?.product_name ?? 'Unknown'}</p>
-              <p><strong>Location:</strong> {entry.location}</p>
-              <p><strong>Quantity:</strong> {entry.quantity_on_hand}</p>
-              <p><strong>SDS:</strong> {entry.sds_available ? '✅' : '❌'}</p>
+              <p>
+                <strong>Product:</strong> {entry.products.name}
+              </p>
+              {entry.products.sds_url && (
+                <p>
+                  <a
+                    href={entry.products.sds_url}
+                    target="_blank"
+                    className="text-blue-600 hover:underline"
+                  >
+                    View SDS
+                  </a>
+                </p>
+              )}
             </li>
           ))}
         </ul>
