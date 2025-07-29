@@ -11,7 +11,7 @@ type WatchListItem = {
 }
 
 export default async function SdsPage() {
-  const supabase = supabaseServer()
+  const supabase = await supabaseServer()
   const {
     data: { session },
   } = await supabase.auth.getSession()
