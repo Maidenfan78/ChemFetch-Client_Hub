@@ -4,9 +4,9 @@ import { supabaseBrowser } from '@/lib/supabase-browser';
 
 export type WatchListItem = {
   id: number
-  products: {
+  product: {
     id: string
-    name: string
+    product_name: string
     sds_url: string | null
   }
 }
@@ -22,7 +22,7 @@ export function useWatchList() {
 
       const { data, error } = await supabase
         .from('user_chemical_watch_list')
-        .select('id, products(id, name, sds_url)')
+        .select('id, product(id, product_name, sds_url)')
         .order('added_at', { ascending: false })
         .returns<WatchListItem[]>();
 

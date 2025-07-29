@@ -20,12 +20,12 @@ export default function WatchListPage() {
           {data.map((entry) => (
             <li key={entry.id} className="border p-4 rounded shadow">
               <p>
-                <strong>Product:</strong> {entry.products.name}
+                <strong>Product:</strong> {entry.product.product_name}
               </p>
-              {entry.products.sds_url && (
+              {entry.product.sds_url && (
                 <p>
                   <a
-                    href={entry.products.sds_url}
+                    href={entry.product.sds_url}
                     target="_blank"
                     className="text-blue-600 hover:underline"
                   >

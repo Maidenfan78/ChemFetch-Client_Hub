@@ -19,7 +19,7 @@ export interface Database {
           product_id?: string
         }
       }
-      products: {
+      product: {
         Row: {
           id: string
           name: string

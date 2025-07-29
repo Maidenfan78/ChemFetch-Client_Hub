@@ -67,7 +67,7 @@ This document tracks what has been implemented and what remains to be built for 
 ### 4. Data & Backend Integration
 
 - **Supabase Schema**
-  - [ ] Finalize fields on `products` and `user_chemical_watch_list`
+  - [ ] Finalize fields on `product` and `user_chemical_watch_list`
   - [ ] Add RLS policies for multi-tenancy (per `auth.uid`)
 - **Backend Endpoints**
   - [ ] Wire frontend to `chemfetch-backend` APIs (`/scan`, `/sds-by-name`)
