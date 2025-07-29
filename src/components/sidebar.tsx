@@ -1,7 +1,9 @@
+// src/components/sidebar.tsx
+
 'use client'
 
 import Link from 'next/link'
-import { Home, FileText, LogOut } from 'lucide-react'
+import { Home, FileText, LogOut, Eye } from 'lucide-react'
 import { supabaseBrowser } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 
@@ -24,6 +26,9 @@ export function Sidebar() {
         <Link href="/sds" className="flex items-center gap-2 hover:text-blue-600">
           <FileText size={20} /> SDS Register
         </Link>
+        <Link href="/watchlist" className="flex items-center gap-2 hover:text-blue-600">
+          <Eye size={20} /> Chemical Register List
+        </Link>
       </nav>
       <button
         onClick={handleLogout}
@@ -32,4 +37,5 @@ export function Sidebar() {
         <LogOut size={20} /> Logout
       </button>
     </aside>
-  )}
+  )
+}
