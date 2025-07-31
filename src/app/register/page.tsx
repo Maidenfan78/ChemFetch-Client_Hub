@@ -13,22 +13,32 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-    })
-    if (signUpError) {
-      setError(signUpError.message)
-    } else {
-      setMessage(
-        'Registration successful! Check your email for a confirmation link.'
-      )
-      router.push('/login')
-    }
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError('')
+  setMessage('')
+
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!isValidEmail) {
+    setError('Please enter a valid email address.')
+    return
   }
+
+  const { error: signUpError } = await supabase.auth.signUp({
+    email,
+    password,
+  })
+
+  if (signUpError) {
+    setError(signUpError.message)
+  } else {
+    setMessage(
+      'Registration successful! Check your email for a confirmation link.'
+    )
+    router.push('/login')
+  }
+}
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">

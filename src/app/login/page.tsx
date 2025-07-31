@@ -1,3 +1,4 @@
+// app/login/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -12,19 +13,33 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (authError) {
-      setError(authError.message)
-    } else {
-      router.push('/')
-    }
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError('')
+
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  if (!isValidEmail) {
+    setError('Please enter a valid email address.')
+    return
   }
+
+  if (password.length < 6) {
+    setError('Password must be at least 6 characters.')
+    return
+  }
+
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (signInError) {
+    setError(signInError.message)
+  } else {
+    router.push('/') // or wherever you want to go after login
+  }
+}
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -57,7 +72,7 @@ export default function LoginPage() {
           Sign In
         </button>
         <p className="text-sm text-center">
-          Don’t have an account?{' '}
+          Don't have an account?{' '}
           <Link href="/register" className="text-blue-600 hover:underline">
             Register
           </Link>
