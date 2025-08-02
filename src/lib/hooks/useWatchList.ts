@@ -23,7 +23,8 @@ export function useWatchList() {
       const { data, error } = await supabase
         .from('user_chemical_watch_list')
         .select('id, product:product_id(id, name, sds_url)')
-        .order('created_at', { ascending: false })
+        // The table uses `added_at` to track insert time
+        .order('added_at', { ascending: false })
         .returns<WatchListItem[]>();
 
       if (error) setError(error.message);
