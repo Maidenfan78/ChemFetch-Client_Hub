@@ -71,13 +71,13 @@ const handleSubmit = async (e: React.FormEvent) => {
         >
           Sign In
         </button>
-        <p className="text-sm text-center">
-          Don't have an account?{' '}
-          <Link href="/register" className="text-blue-600 hover:underline">
-            Register
-          </Link>
-        </p>
-      </form>
-    </div>
-  )
-}
+          <p className="text-sm text-center">
+            Don&apos;t have an account?{' '}
+            <Link href="/register" className="text-blue-600 hover:underline">
+              Register
+            </Link>
+          </p>
+        </form>
+      </div>
+    )
+  }
