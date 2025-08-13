@@ -8,6 +8,15 @@ export type WatchListItem = {
     id: string
     name: string
     sds_url: string | null
+    sds_metadata: {
+      issue_date: string | null
+      hazardous_substance: boolean | null
+      dangerous_good: boolean | null
+      dangerous_goods_class: string | null
+      packing_group: string | null
+      subsidiary_risks: string | null
+      description: string | null
+    } | null
   }
 }
 
@@ -22,7 +31,9 @@ export function useWatchList() {
 
       const { data, error } = await supabase
         .from('user_chemical_watch_list')
-        .select('id, product:product_id(id, name, sds_url)')
+        .select(
+          'id, product:product_id(id, name, sds_url, sds_metadata(issue_date, hazardous_substance, dangerous_good, dangerous_goods_class, packing_group, subsidiary_risks, description))'
+        )
         // The table uses `created_at` to track insert time
         .order('created_at', { ascending: false })
         .returns<WatchListItem[]>();
