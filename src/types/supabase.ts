@@ -9,7 +9,7 @@ export interface Database {
           id: number
           user_id: string
           product_id: string
-          added_at: string
+          created_at: string
         }
         Insert: {
           user_id: string

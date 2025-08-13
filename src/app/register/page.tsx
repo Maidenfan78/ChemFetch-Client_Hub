@@ -12,33 +12,50 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError('')
-  setMessage('')
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setMessage('')
+    setLoading(true)
 
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  if (!isValidEmail) {
-    setError('Please enter a valid email address.')
-    return
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    if (!isValidEmail) {
+      setError('Please enter a valid email address.')
+      setLoading(false)
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.')
+      setLoading(false)
+      return
+    }
+
+    try {
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (signUpError) {
+        setError(signUpError.message)
+      } else {
+        setMessage(
+          'Registration successful! Check your email for a confirmation link.'
+        )
+        // Redirect to login after a short delay
+        setTimeout(() => {
+          router.push('/login')
+        }, 2000)
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
-
-  const { error: signUpError } = await supabase.auth.signUp({
-    email,
-    password,
-  })
-
-  if (signUpError) {
-    setError(signUpError.message)
-  } else {
-    setMessage(
-      'Registration successful! Check your email for a confirmation link.'
-    )
-    router.push('/login')
-  }
-}
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -59,7 +76,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Password (min 6 characters)"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
@@ -67,9 +84,10 @@ const handleSubmit = async (e: React.FormEvent) => {
         />
         <button
           type="submit"
-          className="w-full p-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+          disabled={loading}
+          className="w-full p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded"
         >
-          Sign Up
+          {loading ? 'Creating account...' : 'Sign Up'}
         </button>
         <p className="text-sm text-center">
           Already have an account?{' '}

@@ -1,4 +1,3 @@
-// app/login/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -12,34 +11,44 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError('')
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
 
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  if (!isValidEmail) {
-    setError('Please enter a valid email address.')
-    return
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    if (!isValidEmail) {
+      setError('Please enter a valid email address.')
+      setLoading(false)
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.')
+      setLoading(false)
+      return
+    }
+
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        setError(signInError.message)
+      } else {
+        router.push('/')
+        router.refresh()
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
-
-  if (password.length < 6) {
-    setError('Password must be at least 6 characters.')
-    return
-  }
-
-  const { error: signInError } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-
-  if (signInError) {
-    setError(signInError.message)
-  } else {
-    router.push('/') // or wherever you want to go after login
-  }
-}
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -67,17 +76,18 @@ const handleSubmit = async (e: React.FormEvent) => {
         />
         <button
           type="submit"
-          className="w-full p-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+          disabled={loading}
+          className="w-full p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded"
         >
-          Sign In
+          {loading ? 'Signing in...' : 'Sign In'}
         </button>
-          <p className="text-sm text-center">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-blue-600 hover:underline">
-              Register
-            </Link>
-          </p>
-        </form>
-      </div>
-    )
-  }
+        <p className="text-sm text-center">
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="text-blue-600 hover:underline">
+            Register
+          </Link>
+        </p>
+      </form>
+    </div>
+  )
+}
