@@ -35,6 +35,42 @@ export interface Database {
           sds_url?: string | null
         }
       }
+      sds_metadata: {
+        Row: {
+          product_id: string
+          issue_date: string | null
+          hazardous_substance: boolean | null
+          dangerous_good: boolean | null
+          dangerous_goods_class: string | null
+          description: string | null
+          packing_group: string | null
+          subsidiary_risks: string | null
+          raw_json: Json | null
+          created_at: string
+        }
+        Insert: {
+          product_id: string
+          issue_date?: string | null
+          hazardous_substance?: boolean | null
+          dangerous_good?: boolean | null
+          dangerous_goods_class?: string | null
+          description?: string | null
+          packing_group?: string | null
+          subsidiary_risks?: string | null
+          raw_json?: Json | null
+        }
+        Update: {
+          product_id?: string
+          issue_date?: string | null
+          hazardous_substance?: boolean | null
+          dangerous_good?: boolean | null
+          dangerous_goods_class?: string | null
+          description?: string | null
+          packing_group?: string | null
+          subsidiary_risks?: string | null
+          raw_json?: Json | null
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
