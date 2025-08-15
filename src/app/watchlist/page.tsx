@@ -1,10 +1,27 @@
 // app/(tabs)/watch-list/page.tsx
 'use client';
 
+import { useState } from 'react';
 import { useWatchList } from '@/lib/hooks/useWatchList';
 
 export default function WatchListPage() {
   const { data, loading, error } = useWatchList();
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const handleUpdate = async (productId: string) => {
+    try {
+      setUpdatingId(productId);
+      await fetch('/api/update-sds', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      });
+    } catch (err) {
+      console.error('Failed to update SDS info', err);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -32,17 +49,28 @@ export default function WatchListPage() {
               {data.map((entry) => (
                 <tr key={entry.id} className="border-t">
                   <td className="p-2 border">
-                    {entry.product.sds_url ? (
-                      <a
-                        href={entry.product.sds_url}
-                        target="_blank"
-                        className="text-blue-600 hover:underline"
+                    <div className="flex items-center gap-2">
+                      {entry.product.sds_url ? (
+                        <a
+                          href={entry.product.sds_url}
+                          target="_blank"
+                          className="text-blue-600 hover:underline"
+                        >
+                          {entry.product.name}
+                        </a>
+                      ) : (
+                        entry.product.name
+                      )}
+                      <button
+                        onClick={() => handleUpdate(entry.product.id)}
+                        disabled={updatingId === entry.product.id}
+                        className="rounded bg-blue-500 px-2 py-1 text-xs text-white disabled:opacity-50"
                       >
-                        {entry.product.name}
-                      </a>
-                    ) : (
-                      entry.product.name
-                    )}
+                        {updatingId === entry.product.id
+                          ? 'Updating...'
+                          : 'Update SDS Info'}
+                      </button>
+                    </div>
                   </td>
                   <td className="p-2 border">
                     {entry.product.sds_metadata?.issue_date ?? '—'}
