@@ -1,32 +1,38 @@
+// src/app/api/update-sds/route.ts
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const { productId } = await request.json();
+    const { productId, overrideUrl } = await request.json();
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
     if (!backendUrl) {
-      return NextResponse.json(
-        { error: 'Backend URL not configured' },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: 'Backend URL not configured' }, { status: 500 });
     }
 
-    const response = await fetch(`${backendUrl}/parse-sds`, {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 300_000); // 5 minutes
+
+    const resp = await fetch(`${backendUrl}/parse-sds`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product_id: productId }),
+      // Node backend route should accept productId and optional overrideUrl
+      body: JSON.stringify({ productId, overrideUrl }),
+      signal: controller.signal,
+    }).catch((e) => {
+      throw new Error(e?.name === 'AbortError' ? 'Parse timed out' : String(e));
     });
+    clearTimeout(id);
 
-    if (!response.ok) {
-      const text = await response.text();
-      return NextResponse.json(
-        { error: text || 'Failed to trigger parse' },
-        { status: response.status },
-      );
+    const text = await resp.text();
+    let data: any;
+    try { data = JSON.parse(text); } catch { data = { raw: text }; }
+
+    if (!resp.ok) {
+      return NextResponse.json({ error: data?.error || data?.raw || 'Failed to trigger parse' }, { status: resp.status });
     }
 
-    return NextResponse.json({ success: true });
+    // bubble up parsed fields so the UI can refresh row(s)
+    return NextResponse.json({ success: true, ...data });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });
