@@ -4,6 +4,7 @@ import { supabaseBrowser } from '@/lib/supabase-browser';
 
 export type WatchListItem = {
   id: number
+  created_at?: string
   product: {
     id: string
     name: string
@@ -25,6 +26,7 @@ export function useWatchList() {
   const [data, setData] = useState<WatchListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchWatchList = async () => {
@@ -38,6 +40,7 @@ export function useWatchList() {
           .select(`
             id, 
             product_id,
+            created_at,
             sds_issue_date,
             hazardous_substance,
             dangerous_good,
@@ -113,6 +116,7 @@ export function useWatchList() {
 
           return {
             id: item.id,
+            created_at: item.created_at,
             product: {
               id: product?.id || '',
               name: product?.name || '',
@@ -133,7 +137,11 @@ export function useWatchList() {
     };
 
     fetchWatchList();
-  }, []);
+  }, [refreshKey]);
 
-  return { data, loading, error };
+  const refresh = () => {
+    setRefreshKey(prev => prev + 1);
+  };
+
+  return { data, loading, error, refresh };
 } 
