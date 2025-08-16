@@ -63,6 +63,7 @@ export default function WatchListPage() {
             <thead>
               <tr className="bg-gray-50 dark:bg-gray-800">
                 <th className="p-2 border text-left">Product</th>
+                <th className="p-2 border text-left">Vendor</th>
                 <th className="p-2 border text-left">Issue Date</th>
                 <th className="p-2 border text-center">Hazardous</th>
                 <th className="p-2 border text-center">Dangerous Good</th>
@@ -96,7 +97,11 @@ export default function WatchListPage() {
                     </td>
 
                     <td className="p-2 border">
-                      {meta?.issue_date ?? '—'}
+                      {meta?.vendor ?? '—'}
+                    </td>
+
+                    <td className="p-2 border">
+                      {meta?.issue_date ? new Date(meta.issue_date).toLocaleDateString() : '—'}
                     </td>
 
                     <td className="p-2 border text-center">

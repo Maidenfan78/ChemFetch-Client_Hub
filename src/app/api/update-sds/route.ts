@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const { productId, overrideUrl } = await request.json();
+    const { productId, pdfUrl } = await request.json();
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     if (!backendUrl) {
       return NextResponse.json({ error: 'Backend URL not configured' }, { status: 500 });
@@ -15,8 +15,12 @@ export async function POST(request: Request) {
     const resp = await fetch(`${backendUrl}/parse-sds`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      // Node backend route should accept productId and optional overrideUrl
-      body: JSON.stringify({ productId, overrideUrl }),
+      // Backend expects { product_id, sds_url, force }
+      body: JSON.stringify({ 
+        product_id: parseInt(productId), 
+        sds_url: pdfUrl,
+        force: false 
+      }),
       signal: controller.signal,
     }).catch((e) => {
       throw new Error(e?.name === 'AbortError' ? 'Parse timed out' : String(e));
